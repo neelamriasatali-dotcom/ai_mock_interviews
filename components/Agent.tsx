@@ -1,106 +1,4 @@
 
-// import Image from "next/image";
-
-// interface AgentProps {
-//   userName: string;
-// }
-
-// enum CallStatus {
-//   INACTIVE = "INACTIVE",
-//   CONNECTING = "CONNECTING",
-//   ACTIVE = "ACTIVE",
-//   FINISHED = "FINISHED",
-// }
-
-// const Agent = ({ userName }: AgentProps) => {
-//   const isSpeaking = true;
-
-//   // ---- Example state (you can replace with real state later)
-//   const callStatus: CallStatus = CallStatus.INACTIVE;
-
-//   return (
-//     <>
-//       <div className="call-view flex justify-center gap-8 mt-10">
-//         {/* LEFT BOX — AI INTERVIEWER */}
-//         <div
-//           className="card-interview flex flex-col items-center justify-center rounded-2xl p-6"
-//           style={{
-//             height: "230px",
-//             width: "350px",
-//             background:
-//               "linear-gradient(180deg,#262044 0%,rgba(28,22,55,0.7) 100%)",
-//             border: "2px solid #4d4c66",
-//           }}
-//         >
-//           <div className="avatar relative mb-3">
-//             <Image
-//               src="/ai-avatar.png"
-//               alt="ai interviewer"
-//               width={95}
-//               height={95}
-//               className="object-cover rounded-full"
-//             />
-
-//             {isSpeaking && (
-//               <span className="absolute inset-0 rounded-full animate-ping bg-purple-400 opacity-40"></span>
-//             )}
-//           </div>
-
-//           <h3 className="text-center text-white text-lg font-semibold">
-//             AI Interviewer
-//           </h3>
-//         </div>
-
-//         {/* RIGHT BOX — USER */}
-//         <div
-//           className="card-interview flex flex-col items-center justify-center rounded-2xl p-6"
-//           style={{
-//             height: "230px",
-//             width: "350px",
-//             background:
-//               "linear-gradient(180deg,#0d0d15 0%,rgba(12,12,17,0.7) 100%)",
-//             border: "2px solid #2c2c35",
-//           }}
-//         >
-//           <Image
-//             src="/user-avatar.png"
-//             alt="user avatar"
-//             width={95}
-//             height={95}
-//             className="rounded-full object-cover"
-//           />
-
-//           <h3 className="text-center text-white text-lg font-semibold mt-3">
-//             {userName}
-//           </h3>
-//         </div>
-//       </div>
-
-//       {/* CALL BUTTON */}
-//       <div className="w-full flex justify-center mt-6">
-//         {callStatus !== CallStatus.ACTIVE ? (
-//           <button className="px-5 py-2 bg-purple-600 text-white rounded-xl">
-//             <span>
-//               {callStatus === CallStatus.INACTIVE ||
-//               callStatus === CallStatus.FINISHED
-//                 ? "Call"
-//                 : ". . ."}
-//             </span>
-//           </button>
-//         ) : (
-//           <button className="px-5 py-2 bg-red-600 text-white rounded-xl">
-//             End
-//           </button>
-//         )}
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Agent; 1code
-
-
-
 import React from 'react'
 import Image from 'next/image';
 import { cn } from "@/lib/utils";
@@ -116,7 +14,7 @@ const Agent = ({  userName }: AgentProps) => {
   const isSpeaking = true;
   const messages = [
     "whats your name?",
-    "My name is Jhon Doe, nice to meet you!"
+    "My name is Saneel, nice to meet you!"
   ];
   const lastMessage = messages[messages.length - 1];
   return (
