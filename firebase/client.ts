@@ -8,8 +8,6 @@ import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-
 const firebaseConfig = {
   apiKey: "AIzaSyCf5RdLz1P1xOG_0IpUWhJHOMolunVmToo",
   authDomain: "prepwise-7f011.firebaseapp.com",
@@ -19,23 +17,6 @@ const firebaseConfig = {
   appId: "1:885122693367:web:296ec2329136b583c13bf2",
   measurementId: "G-5HDPSQ9SHK"
 };
-
-
-
-
-
-
-// const firebaseConfig = { (real code neelam)
-//   apiKey: "AIzaSyCf5RdLz1P1xOG_0IpUWhJHOMolunVmToo",
-//   authDomain: "prepwise-7f011.firebaseapp.com",
-//   projectId: "prepwise-7f011",
-//   storageBucket: "prepwise-7f011.firebasestorage.app",
-//   messagingSenderId: "885122693367",
-//   appId: "1:885122693367:web:296ec2329136b583c13bf2",
-//   measurementId: "G-5HDPSQ9SHK"
-// };
-
-
 
 // Initialize Firebase
 const app = !getApps.length ? initializeApp(firebaseConfig) :getApp();
