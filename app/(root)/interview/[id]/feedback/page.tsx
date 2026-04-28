@@ -1,119 +1,84 @@
-import dayjs from "dayjs";
-import Link from "next/link";
-import Image from "next/image";
-import { redirect } from "next/navigation";
 
-import {
-  getFeedbackByInterviewId,
-  getInterviewById,
-} from "@/lib/actions/general.action";
-import { Button } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/actions/auth.action";
 
-const Feedback = async ({ params }: RouteParams) => {
-  const { id } = await params;
-  const user = await getCurrentUser();
 
-  const interview = await getInterviewById(id);
-  if (!interview) redirect("/");
 
-  const feedback = await getFeedbackByInterviewId({
-    interviewId: id,
-    userId: user?.id!,
-  });
+"use client"
+import React, { useEffect, useState } from 'react';
+// import { db } from "@/firebase/config";
+import { db } from "@/firebase/client"; 
+import { doc, getDoc } from "firebase/firestore";
+import Link from 'next/link';
+
+interface FeedbackPageProps {
+  params: { id: string };
+}
+
+const FeedbackPage = ({ params }: FeedbackPageProps) => {
+  const [feedbackList, setFeedbackList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const docRef = doc(db, "Interviews", params.id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setFeedbackList(docSnap.data().allAnswers || []);
+        } else {
+          console.log("No interview found!");
+        }
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeedback();
+  }, [params.id]);
+
+  if (loading) return <div className="p-20 text-center">Loading Feedback...</div>;
 
   return (
-    <section className="section-feedback">
-      <div className="flex flex-row justify-center">
-        <h1 className="text-4xl font-semibold">
-          Feedback on the Interview -{" "}
-          <span className="capitalize">{interview.role}</span> Interview
-        </h1>
-      </div>
+    <div className="p-10 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold text-green-600 mb-2">Interview Result</h1>
+      <p className="text-gray-500 mb-8">Review your answers and improvement tips below.</p>
 
-      <div className="flex flex-row justify-center ">
-        <div className="flex flex-row gap-5">
-          {/* Overall Impression */}
-          <div className="flex flex-row gap-2 items-center">
-            <Image src="/star.svg" width={22} height={22} alt="star" />
-            <p>
-              Overall Impression:{" "}
-              <span className="text-primary-200 font-bold">
-                {feedback?.totalScore}
-              </span>
-              /100
-            </p>
-          </div>
-
-          {/* Date */}
-          <div className="flex flex-row gap-2">
-            <Image src="/calendar.svg" width={22} height={22} alt="calendar" />
-            <p>
-              {feedback?.createdAt
-                ? dayjs(feedback.createdAt).format("MMM D, YYYY h:mm A")
-                : "N/A"}
-            </p>
-          </div>
+      {feedbackList.length === 0 ? (
+        <div className="text-center p-10 border rounded-lg">
+          <p>No records found for this interview.</p>
+          <Link href="/dashboard" className="text-blue-500 underline mt-4 inline-block">Go Back to Dashboard</Link>
         </div>
-      </div>
-
-      <hr />
-
-      <p>{feedback?.finalAssessment}</p>
-
-      {/* Interview Breakdown */}
-      <div className="flex flex-col gap-4">
-        <h2>Breakdown of the Interview:</h2>
-        {feedback?.categoryScores?.map((category, index) => (
-          <div key={index}>
-            <p className="font-bold">
-              {index + 1}. {category.name} ({category.score}/100)
-            </p>
-            <p>{category.comment}</p>
+      ) : (
+        feedbackList.map((item, index) => (
+          <div key={index} className="mb-6 border rounded-xl overflow-hidden shadow-sm">
+            <div className="bg-gray-100 p-4 font-bold">
+              Q{index + 1}: {item.question}
+            </div>
+            <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-3 bg-red-50 border border-red-100 rounded-lg">
+                <span className="font-bold text-red-700">Your Answer:</span>
+                <p className="mt-1">{item.userAnswer}</p>
+              </div>
+              <div className="p-3 bg-green-50 border border-green-100 rounded-lg">
+                <span className="font-bold text-green-700">AI Feedback:</span>
+                <p className="mt-1">{item.feedback}</p>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
+        ))
+      )}
 
-      <div className="flex flex-col gap-3">
-        <h3>Strengths</h3>
-        <ul>
-          {feedback?.strengths?.map((strength, index) => (
-            <li key={index}>{strength}</li>
-          ))}
-        </ul>
+      <div className="mt-10">
+        <Link href="/dashboard">
+          <button className="bg-black text-white px-8 py-3 rounded-full hover:opacity-80 transition">
+            Return to Dashboard
+          </button>
+        </Link>
       </div>
-
-      <div className="flex flex-col gap-3">
-        <h3>Areas for Improvement</h3>
-        <ul>
-          {feedback?.areasForImprovement?.map((area, index) => (
-            <li key={index}>{area}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="buttons">
-        <Button className="btn-secondary flex-1">
-          <Link href="/" className="flex w-full justify-center">
-            <p className="text-sm font-semibold text-primary-200 text-center">
-              Back to dashboard
-            </p>
-          </Link>
-        </Button>
-
-        <Button className="btn-primary flex-1">
-          <Link
-            href={`/interview/${id}`}
-            className="flex w-full justify-center"
-          >
-            <p className="text-sm font-semibold text-black text-center">
-              Retake Interview
-            </p>
-          </Link>
-        </Button>
-      </div>
-    </section>
+    </div>
   );
 };
 
-export default Feedback;
+export default FeedbackPage;

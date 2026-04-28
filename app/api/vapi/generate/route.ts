@@ -55,7 +55,7 @@ export async function GET() {
 
 
 export async function POST(request: Request) {
-  const { type, role, level, techstack, amount, userid } = await request.json();
+  const { type, role, level, techstack, amount, userId } = await request.json();
 
   let questions: string[];
 
@@ -90,7 +90,7 @@ Return only JSON array like ["Question 1","Question 2"]`,
     level: level,
     techstack: techstack.split(","),
     questions: questions,
-    userId: userid,
+    userId: userId,
     finalized: true,
     coverImage: getRandomInterviewCover(),
     createdAt: new Date().toISOString(),

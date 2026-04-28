@@ -332,3 +332,31 @@
     transform: translateY(0);
   }
 }
+
+
+
+
+
+
+
+
+
+
+.feedback-card{
+background:#111827;
+padding:20px;
+border-radius:12px;
+text-align:center;
+}
+
+.feedback-card h2{
+font-size:28px;
+font-weight:700;
+margin-top:6px;
+}
+
+.feedback-box{
+background:#111827;
+padding:20px;
+border-radius:12px;
+}
